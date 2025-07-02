@@ -1,0 +1,27 @@
+<% layout('/layouts/boilerplate') -%>
+<h2 class="text-center my-4">Showing: <%= category.replace("-", " ").toUpperCase() %></h2>
+
+<% if (listings.length > 0) { %>
+  <div class="listings-container">
+    <% listings.forEach(listing => { %>
+      <!-- Card layout just like in index.ejs -->
+      <a href="/listings/<%= listing._id %>" class="listing-card">
+        <div class="card">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
+          <div class="card-body">
+            <h5 class="card-title"><%= listing.title %></h5>
+             <div class="card-price">₹<%= listing.price.toLocaleString("en-IN") %>\night</div>
+            <div class="card-location">
+              <i class="fas fa-map-marker-alt"></i> <%=listing.location%>, <%=listing.country%>
+            </div>
+          </div>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } else { %>
+  <div class="text-center mt-5">
+    <h4>We're working hard to connect more stays in this category 🏨</h4>
+    <p>Stay tuned!</p>
+  </div>
+<% } %>

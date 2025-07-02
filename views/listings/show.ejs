@@ -1,0 +1,181 @@
+<% layout('/layouts/boilerplate') -%>
+
+<body >
+  <div class="container mt-5" data-aos="fade-up">
+    <!-- Listing Title -->
+    <h2 class="mb-4 text-center fw-bold"><%= listing.title %></h2>
+
+    <!-- Listing Card -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card mb-5">
+          <% if (listing.image?.url) { %>
+            <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="<%= listing.title %>">
+          <% } else { %>
+            <div class="card-img-top show-img bg-secondary d-flex align-items-center justify-content-center">
+              <span class="text-white">No Image Available</span>
+            </div>
+          <% } %>
+
+          <div class="card-body">
+            <ul class="mb-4">
+              <li><strong>Description:</strong> <%= listing.description %></li>
+              <% if (listing.category) { %>
+                <li><strong>Category:</strong> <%= listing.category %></li>
+              <% } %>
+              <li class="card-price">
+                &dollar;<%= listing.price.toLocaleString("en-US") %>&nbsp;per night
+              </li>
+              <li>
+                <i class="fas fa-map-marker-alt me-2" style="color:red;"></i>
+                <%= listing.location %>, <%= listing.country %>
+              </li>
+            </ul>
+
+            <% if (currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+              <div class="d-flex justify-content-between">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark">
+                  <i class="fas fa-edit me-2"></i>Edit
+                </a>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="delete-form">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt me-2"></i>Delete
+                  </button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Form -->
+    <% if (currUser) { %>
+      <div class="review-section mb-5 p-4 rounded shadow-sm" data-aos="fade-up">
+        <h3 class="mb-4 border-bottom pb-2 fw-bold">Leave a Review</h3>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+          <!-- Rating -->
+          <div class="mb-4">
+            <label class="form-label fw-bold d-block mb-2">Rating</label>
+            <div class="star-rating">
+              <% for (let i = 5; i >= 1; i--) { %>
+                <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>" required>
+                <label for="star<%= i %>">
+                  <i class="far fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </label>
+              <% } %>
+              <div class="invalid-feedback">Please select a rating</div>
+            </div>
+            <small class="text-muted">Select your rating (1–5 stars)</small>
+          </div>
+
+          <!-- Comment -->
+          <div class="mb-3" data-aos="fade-up">
+            <label for="comment" class="form-label fw-bold">Your Review</label>
+            <textarea name="review[comment]" id="comment" rows="3" class="form-control" required></textarea>
+            <div class="invalid-feedback">Please share your experience</div>
+          </div>
+
+          <button class="btn btn-primary px-4">
+            <i class="fas fa-paper-plane me-2"></i>Submit Review
+          </button>
+        </form>
+      </div>
+    <% } else { %>
+      <div class="review-section mb-5 p-4 bg-light rounded shadow-sm">
+        <h3 class="mb-4 border-bottom pb-2">Login to review</h3>
+        <a href="/login" class="btn btn-dark">Login</a>
+      </div>
+    <% } %>
+
+    <!-- Reviews -->
+    <div class="all-reviews shadow-sm rounded mb-5 p-4" data-aos="fade-up">
+      <h3 class="mb-4 border-bottom pb-2 fw-bold">What Our Guests Say</h3>
+
+      <% if (listing.review?.length > 0) { %>
+        <div class="review-list row gx-4 gy-4" id="reviewList">
+          <% for (let i = 0; i < listing.review.length; i++) {
+               const review = listing.review[i]; %>
+            <div class="col-md-6 review-card-wrapper <%= i >= 5 ? 'd-none' : '' %>">
+              <div class="review-card card p-3 shadow-sm h-100">
+                <!-- Reviewer -->
+                <div class="mb-2">
+                  <strong class="<%= review.author?.username ? 'text-primary' : 'text-secondary' %>">
+                    <%= review.author?.username ? '@' + review.author.username : 'Anonymous' %>
+                  </strong>
+                </div>
+
+                <!-- Rating + Delete -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="rating">
+                    <% for (let j = 0; j < 5; j++) { %>
+                      <i class="fas fa-star <%= j < review.rating ? 'text-warning' : 'text-secondary' %>"></i>
+                    <% } %>
+                  </div>
+                  <% if (currUser && review.author && String(currUser._id) === String(review.author._id)) { %>
+                    <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                      <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+
+                <!-- Comment -->
+                <p class="mb-0"><%= review.comment %></p>
+                <small class="text-muted mt-2 d-block">
+                  <%= review.created_at ? review.created_at.toLocaleDateString() : 'Review date not available' %>
+                </small>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Load More / Show Less -->
+        <% if (listing.review.length > 5) { %>
+          <div class="text-center mt-4">
+            <button id="loadMoreBtn" class="btn btn-outline-primary px-4">Load More Reviews</button>
+            <button id="showLessBtn" class="btn btn-outline-primary px-4">Show Less</button>
+          </div>
+        <% } %>
+      <% } else { %>
+        <div class="alert alert-info">No reviews yet. Be the first to review!</div>
+      <% } %>
+    </div>
+
+    <!-- Map -->
+    <% if (listing.coordinates?.coordinates?.length === 2) { %>
+      <div id="map" data-aos="fade-up"
+        data-lat="<%= listing.coordinates.coordinates[1] %>"
+        data-lng="<%= listing.coordinates.coordinates[0] %>"
+        data-title="<%= listing.title %>">
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning text-center">
+        <i class="fas fa-map-marker-alt me-2"></i>Location not available for this listing.
+      </div>
+    <% } %>
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/js/map.js" defer></script>
+  <script src="/js/rating.js" defer></script>
+  <script>
+    const delForm = document.querySelector('.delete-form');
+    if (delForm) {
+      delForm.addEventListener('submit', (e) => {
+        const button = delForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Deleting...`;
+
+        if (!confirm('Are you sure you want to delete this listing?')) {
+          e.preventDefault();
+          button.disabled = false;
+          button.innerHTML = `<i class="fas fa-trash-alt me-2"></i>Delete`;
+        }
+      });
+    }
+  </script>
+</body>

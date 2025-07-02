@@ -1,0 +1,117 @@
+<% layout('/layouts/boilerplate') -%>
+
+<!-- Search Bar -->
+<div class="search-wrapper mt-4 d-flex flex-column align-items-center" data-aos="fade-up">
+  <form action="/listings" id="searchForm" class="search-form d-flex mb-2" role="search">
+    <input
+      class="form-control search-input me-2"
+      type="search"
+      placeholder="Search destinations..."
+      aria-label="Search"
+    />
+    <button class="btn search-button" type="submit">
+      <i class="fas fa-search me-1"></i>
+    </button>
+  </form>
+
+  <div
+    id="searchAlert"
+    class="alert alert-warning search-alert text-center p-2 d-none"
+    style="width: 100%; max-width: 400px;"
+  >
+    🔧 Search feature is under development. Stay tuned!
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div id="filter" class="filter-bar container my-4 mt-3" data-aos="zoom-in">
+  <div class="filter-chip" data-category="trending">
+    <i class="fa-solid fa-fire-flame-curved"></i>
+    <span>Trending</span>
+  </div>
+  <div class="filter-chip" data-category="rooms">
+    <i class="fa-solid fa-bed"></i>
+    <span>Rooms</span>
+  </div>
+  <div class="filter-chip" data-category="iconic-cities">
+    <i class="fa-solid fa-tree-city"></i>
+    <span>Iconic Cities</span>
+  </div>
+  <div class="filter-chip" data-category="castle">
+    <span class="material-symbols-outlined">castle</span>
+    <span>Castle</span>
+  </div>
+  <div class="filter-chip" data-category="pools">
+    <i class="fa-solid fa-person-swimming"></i>
+    <span>Amazing Pools</span>
+  </div>
+  <div class="filter-chip" data-category="camping">
+    <i class="fa-solid fa-campground"></i>
+    <span>Camping</span>
+  </div>
+  <div class="filter-chip" data-category="farms">
+    <i class="fa-solid fa-cow"></i>
+    <span>Farms</span>
+  </div>
+</div>
+
+<!-- Listings -->
+<div class="listings-container">
+  <% for (let listing of allListings) { %>
+    <a href="/listings/<%= listing._id %>" class="listing-card">
+      <div class="card " data-aos="fade-up">
+        <img
+          src="<%= listing.image.url %>"
+          class="card-img-top"
+          alt="<%= listing.title %>"
+          loading="lazy"
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= listing.title %></h5>
+          <div class="card-price">
+            &dollar;<%= listing.price.toLocaleString("en-IN") %> / night
+          </div>
+          <div class="card-location">
+            <i class="fas fa-map-marker-alt" style="color: red;"></i>
+            <%= listing.location %>, <%= listing.country %>
+          </div>
+        </div>
+      </div>
+    </a>
+  <% } %>
+</div>
+
+<!-- Scripts -->
+<script>
+  // Filter click redirects
+  document.querySelectorAll(".filter-chip").forEach((filter) => {
+    filter.addEventListener("click", () => {
+      const category = filter.dataset.category;
+      window.location.href = `/filters/${category}`;
+    });
+  });
+
+  // Search alert popup
+  const form = document.getElementById("searchForm");
+  const alertBox = document.getElementById("searchAlert");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    alertBox.classList.remove("d-none");
+    void alertBox.offsetWidth;
+    alertBox.classList.add("show");
+
+    setTimeout(() => {
+      alertBox.classList.remove("show");
+      setTimeout(() => {
+        alertBox.classList.add("d-none");
+      }, 500);
+    }, 4000);
+  });
+</script>
+
+<!-- AOS Animations -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 700 });</script>

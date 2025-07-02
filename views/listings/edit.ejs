@@ -1,0 +1,115 @@
+<% layout('/layouts/boilerplate') -%>
+<style>
+  .current-img-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 3rem;
+  color: #6c757d; /* muted text */
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.current-img {
+  max-width: 100%;
+  height: auto;
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<body>
+  <div class="container ">
+    <div class="row justify-content-center ">
+      <div class="col-lg-8 ">
+        <form action="/listings/<%=listing._id%>?_method=PATCH" method="POST" class="edit-form-container needs-validation form-performa" novalidate enctype="multipart/form-data">
+          <h2 class="edit-form-title">Edit Your Listing</h2>
+          
+          <div class="mb-4">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="listing[title]" required class="form-control" id="title" 
+                   value="<%=listing.title%>" placeholder="Beautiful Beachfront Villa" maxlength="33">
+            <div class="invalid-feedback">Title cannot be empty</div>
+          </div>
+      
+          <div class="mb-4">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" required class="form-control" id="description"
+                     placeholder="Describe your property..."><%=listing.description%></textarea>
+            <div class="invalid-feedback">Description should be valid</div>
+          </div>
+          <div class="mb-4 text-center">
+            <small class="current-img-label">Current Image</small>
+            <img src="<%= listing.image.url %>" alt="Current Listing Image" class="current-img img-fluid" />
+          </div>
+      
+          <div class="mb-4">
+            <label for="image" class="form-label">Upload New Image </label>
+            <input type="file" name="image"  class="form-control" id="image" >
+          </div>
+
+          <div class="mb-4">
+              <label for="category" class="form-label fw-bold">Category</label>
+              <select name="listing[category]"  id="category" class="form-select" required>
+                  <option value="">-- Select a category --</option>
+                  <option value="rooms">🛏️ Rooms</option>
+                  <option value="iconic-cities">🏙️ Iconic Cities</option>
+                  <option value="castle">🏰 Castle</option>
+                  <option value="pools">🏊 Amazing Pools</option>
+                  <option value="camping">🏕️ Camping</option>
+                  <option value="farms">🐄 Farms</option>
+              </select>
+              <div class="invalid-feedback">Please choose a category</div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-4 price-input">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" name="listing[price]" required class="form-control" id="price" 
+                    value="<%=listing.price%>" placeholder="1200" min="0">
+              <div class="invalid-feedback">Price should be valid</div>
+            </div>
+
+            <div class="col-md-8">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" name="listing[country]" required class="form-control" id="country" 
+                    value="<%=listing.country%>" placeholder="USA">
+              <div class="invalid-feedback">Country should be valid</div>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listing[location]" required class="form-control" id="location" 
+                  value="<%=listing.location%>" placeholder="New York"  maxlength="15">
+            <div class="invalid-feedback">Location should be valid</div>
+          </div>
+      
+          <button type="submit" class="btn  btn-dark edit-btn">
+            <i class="fas fa-save me-2"></i>Update Listing
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const form = document.querySelector("form");
+  const submitButton = form.querySelector("button[type='submit']");
+
+  form.addEventListener("submit", (e) => {
+    if(!form.checkValidity()){
+      e.preventDefault();
+      return;
+    }
+    submitButton.disabled = true;
+    submitButton.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Updating...`;
+  });
+</script>
+
+</body>

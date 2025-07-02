@@ -1,0 +1,99 @@
+<% layout('/layouts/boilerplate') -%>
+
+<div class="container mt-4">
+  <!-- Hero Section -->
+  <div class="hero text-center py-5 px-4 rounded shadow-sm bg-light" data-aos="fade-up">
+    <h1 class="display-5 fw-bold">Welcome to WanderLust</h1>
+    <p class="lead mb-4">Discover stays and experiences you’ll never forget. Start your journey today.</p>
+    <a href="/listings" class="btn btn-dark px-4 py-2">
+      <i class="fas fa-compass me-2"></i>Browse Listings
+    </a>
+  </div>
+</div>
+
+<!-- Filter Chips -->
+<div id="filter" class="filter-bar container my-5">
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+    <div class="filter-chip" data-category="trending" data-aos="zoom-in">
+      <i class="fa-solid fa-fire-flame-curved"></i>
+      <span>Trending</span>
+    </div>
+    <div class="filter-chip" data-category="rooms" data-aos="zoom-in">
+      <i class="fa-solid fa-bed"></i>
+      <span>Rooms</span>
+    </div>
+    <div class="filter-chip" data-category="iconic-cities" data-aos="zoom-in">
+      <i class="fa-solid fa-tree-city"></i>
+      <span>Iconic Cities</span>
+    </div>
+    <div class="filter-chip" data-category="castle" data-aos="zoom-in">
+      <span class="material-symbols-outlined">castle</span>
+      <span>Castle</span>
+    </div>
+    <div class="filter-chip" data-category="pools" data-aos="zoom-in">
+      <i class="fa-solid fa-person-swimming"></i>
+      <span>Amazing Pools</span>
+    </div>
+    <div class="filter-chip" data-category="camping" data-aos="zoom-in">
+      <i class="fa-solid fa-campground"></i>
+      <span>Camping</span>
+    </div>
+    <div class="filter-chip" data-category="farms" data-aos="zoom-in">
+      <i class="fa-solid fa-cow"></i>
+      <span>Farms</span>
+    </div>
+  </div>
+</div>
+
+<!-- Featured Listings Section -->
+<div class="featured-listings mt-5">
+  <div class="container">
+    <h2 class="featured-title mb-4 fw-semibold" data-aos="fade-up">Top Picks For You</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <% if (featured && featured.length > 0) { %>
+        <% featured.forEach(listing => { %>
+          <div class="col d-flex">
+            <div class="card h-100 w-100 listing-card shadow-sm" data-id="<%= listing._id %>" data-aos="fade-up">
+              <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" loading="lazy">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><%= listing.title %></h5>
+                <p class="card-text">
+                  <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                  <%= listing.location %>, <%= listing.country %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-12 text-center text-muted">
+          <p>No featured listings available right now.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".listing-card").forEach(card => {
+      card.addEventListener("click", () => {
+        const id = card.getAttribute("data-id");
+        if (id) window.location.href = `/listings/${id}`;
+      });
+    });
+
+    document.querySelectorAll(".filter-chip").forEach(filter => {
+      filter.addEventListener("click", () => {
+        const category = filter.dataset.category;
+        if (category) window.location.href = `/filters/${category}`;
+      });
+    });
+  });
+</script>
+
+<!-- AOS Animations -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 700 });</script>

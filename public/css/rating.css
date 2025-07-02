@@ -1,0 +1,57 @@
+/* === Star Rating Wrapper === */
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+/* Hide radio buttons */
+.star-rating input {
+  display: none;
+}
+
+/* Base star appearance */
+.star-rating label {
+  color: #ddd;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* Smooth transitions */
+.star-rating label .far,
+.star-rating label .fas {
+  transition: all 0.2s ease;
+}
+
+/* Solid star hidden by default */
+.star-rating label .fas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+/* ⭐ Checked stars: show filled */
+.star-rating input:checked ~ label .fas,
+.star-rating input:checked ~ label ~ label .fas {
+  opacity: 1;
+  color: #ffc107;
+}
+
+/* ⭐ Hover effect: show filled temporarily */
+.star-rating label:hover .fas,
+.star-rating label:hover ~ label .fas {
+  opacity: 1;
+  color: #ffc107;
+}
+
+/* Hide outline stars when selected/hovered */
+.star-rating input:checked + label .far,
+.star-rating input:checked + label ~ label .far,
+.star-rating label:hover .far,
+.star-rating label:hover ~ label .far {
+  opacity: 0;
+}

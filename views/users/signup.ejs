@@ -1,0 +1,125 @@
+<% layout('/layouts/boilerplate') -%>
+
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f7f7;
+  }
+
+  .signup-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .signup-title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #343a40;
+  }
+
+  .form-label {
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    padding: 12px 16px;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: #ff385c;
+    box-shadow: 0 0 0 0.2rem rgba(255, 56, 92, 0.2);
+  }
+
+  .btn-signup {
+    background-color: #ff385c;
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: 100%;
+  }
+
+  .btn-signup:hover {
+    transform: translateY(-1px);
+  }
+
+  .invalid-feedback {
+    color: #e74c3c;
+    font-size: 0.85rem;
+  }
+
+  .valid-feedback {
+    color: #27ae60;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 576px) {
+    .form-label {
+      margin-bottom: 0.25rem;
+    }
+  }
+</style>
+
+<div class="signup-container" data-aos="fade-up">
+  <h1 class="signup-title">Join WanderLust</h1>
+
+  <form action="/signup" method="POST" class="needs-validation" novalidate>
+    
+    <!-- Username -->
+    <div class="row mb-4 align-items-center">
+      <label for="username" class="col-md-3 form-label">Username</label>
+      <div class="col-md-9 position-relative">
+        <input type="text" name="username" id="username" required placeholder="Enter your username" class="form-control">
+        <div class="invalid-feedback">Please choose a username</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="row mb-4 align-items-center">
+      <label for="email" class="col-md-3 form-label">Email</label>
+      <div class="col-md-9 position-relative">
+        <input type="email" name="email" id="email" required placeholder="Enter your email" class="form-control">
+        <div class="invalid-feedback">Please enter a valid email</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="row mb-4 align-items-center">
+      <label for="password" class="col-md-3 form-label">Password</label>
+      <div class="col-md-9 position-relative">
+        <input type="password" name="password" id="password" required placeholder="Create a password" class="form-control">
+        <div class="invalid-feedback">Password is required</div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-signup mt-2">
+          <i class="fas fa-user-plus me-2"></i> Sign Up
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <p class="text-muted">Already have an account?
+        <a href="/login" class="text-danger fw-semibold">Log in</a>
+      </p>
+    </div>
+  </form>
+</div>
