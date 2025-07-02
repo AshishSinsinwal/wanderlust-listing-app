@@ -10,7 +10,7 @@
           <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
           <div class="card-body">
             <h5 class="card-title"><%= listing.title %></h5>
-             <div class="card-price">₹<%= listing.price.toLocaleString("en-IN") %>\night</div>
+             <div class="card-price">&dollar;<%= listing.price.toLocaleString("en-IN") %>&nbsp;\night</div>
             <div class="card-location">
               <i class="fas fa-map-marker-alt"></i> <%=listing.location%>, <%=listing.country%>
             </div>
