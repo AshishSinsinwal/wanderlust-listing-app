@@ -20,7 +20,7 @@ const userController = require("../controller/user");
 router
   .route("/signup")
   .get(userController.renderSignupForm)
-  .post(wrapAsync(userController.Sigup)); // If controller has a typo, rename to `.signup`
+  .post(wrapAsync(userController.signup)); 
 
 // 🔐 Login
 router
