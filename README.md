@@ -131,9 +131,9 @@ wanderlust/
 ## 📸 Screenshots
 
 <!-- Add your screenshots here -->
-![Homepage](images/wander1.png)
-![Listing Details](images/wander2.png)
-![Create Listing](images/wander3.png)
+![Homepage](public/images/wander1.png)
+![Listing Details](public/images/wander2.png)
+![Create Listing](public/images/wander3.png)
 
 ---
 
